@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -36,7 +37,25 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' =>'required|string|max:200',
+            'description' =>'required|string|max:1000',
+            'price' =>'required',
+            'author' =>'required|string|max:50',
+            'nombre_pages' =>'required|numeric',
+            'url_img'=>'required|image|mimes:png,jpg,jpeg,webp|max:5000'
+        ]);
+        $validateImg = $request->file('url_img')->store('img-books');
+        Book::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'price' => $request->price,
+            'author' => $request->author,
+            'nombre_pages' => $request->nombre_pages,
+            'url_img' => $validateImg,
+            'updated_at' => now()
+        ]);
+        return redirect()->route('home')->with('status','Livre ajouté');
     }
 
     /**
@@ -56,9 +75,9 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Book $book)
     {
-        //
+        return view('pages.edit', compact('book'));
     }
 
     /**
@@ -68,9 +87,31 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        if($request->hasFile('url_img')){
+            Storage::delete($book->url_img);
+            $book->url_img = $request->file('url_img')->store('img_books');
+        }
+        $request->validate([
+        'title' =>'required|string|max:200',
+        'description' =>'required|string|max:1000',
+        'price' =>'required',
+        'author' =>'required|string|max:50',
+        'nombre_pages' =>'required|numeric',
+        'url_img'=>'required|sometimes|image|mimes:png,jpg,jpeg,webp|max:5000'
+        ]);
+
+        $book->update([
+        'title' => $request->title,
+        'description' => $request->description,
+        'price' => $request->price,
+        'author' => $request->author,
+        'nombre_pages' => $request->nombre_pages,
+        'url_img' => $book->url_img,
+        'updated_at' => now()
+        ]);
+        return redirect()->route('books.show', $book->id)->with('status','Livre modifié');
     }
 
     /**
@@ -79,8 +120,9 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+        return redirect()->route('home')->with('status','Livre supprimé');
     }
 }
