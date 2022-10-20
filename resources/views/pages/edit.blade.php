@@ -42,6 +42,7 @@
                 <input type="file" name="url_img" class="block rounded-lg border-gray-400 mt-2">
                 <x-error-msg name="url_img" />
             </div>
+            {{-- btn --}}
             <div class="mt-5">
                 <button class="btn btn-primary " type="submit">Modifier</button>
             </div>

@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $books = Book::orderBy('updated_at','desc')->paginate(10);
@@ -20,9 +15,9 @@ class BookController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new book.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -30,10 +25,10 @@ class BookController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created book in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function store(Request $request)
     {
@@ -59,10 +54,10 @@ class BookController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the specified book.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show(Book $book)
     {
@@ -70,10 +65,10 @@ class BookController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified book.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $book
+     * @return void
      */
     public function edit(Book $book)
     {
@@ -81,11 +76,11 @@ class BookController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified book in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function update(Request $request, Book $book)
     {
@@ -115,10 +110,10 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified book from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int
+     * @return void $id
      */
     public function destroy(Book $book)
     {
